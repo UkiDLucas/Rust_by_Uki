@@ -2,7 +2,7 @@
 //     println!("Hello, world!");
 // }
 
-use std::collections::HashMap;
+//use std::collections::Vec;
 use std::error::Error;
 use std::fs::File;
 use csv::Reader;
@@ -18,23 +18,27 @@ impl CsvTokenizer {
         }
     }
 
-    fn tokenize(&self) -> Result<HashMap<usize, Vec<String>>, Box<dyn Error>> {
+    fn tokenize(&self) -> Result<Vec<Vec<String>>, Box<dyn Error>> {
         let file = File::open(&self.file_path)?;
         let mut reader = Reader::from_reader(file);
-        let mut result = HashMap::new();
-        for (i, record) in reader.records().enumerate() {
-            let record = record?;
-            result.insert(i, record.iter().map(|s| s.to_string()).collect());
+        let mut results: Vec<Vec<String>> = Vec::new();
+
+        for (_, record) in reader.records().enumerate() {
+            if let Ok(record) = record {
+                let fields: Vec<String> = record.iter().map(|field| field.to_string()).collect();
+                results.push(fields);
+            }
         }
-        Ok(result)
+
+        Ok(results)
     }
 }
 
 fn main() -> Result<(), Box<dyn Error>> {
     let tokenizer = CsvTokenizer::new("data/test_data.csv");
     let tokenized_data = tokenizer.tokenize()?;
-    for (line, tokens) in tokenized_data {
-        println!("key: {}\t: tokens: {:?}", line, tokens);
+    for tokens in &tokenized_data {
+        println!("tokens: {:?}", tokens);
     }
     Ok(())
 }
