@@ -34,7 +34,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     let tokenizer = CsvTokenizer::new("data/test_data.csv");
     let tokenized_data = tokenizer.tokenize()?;
     for (line, tokens) in tokenized_data {
-        println!("Line {}: {:?}", line, tokens);
+        println!("key: {}\t: tokens: {:?}", line, tokens);
     }
     Ok(())
 }
