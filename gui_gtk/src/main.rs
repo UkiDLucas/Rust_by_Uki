@@ -5,6 +5,7 @@ use gtk::Button;
 
 const APP_ID: &str = "org.gtk_rs.HelloWorld2";
 
+// DOES NOT COMPILE!
 fn main() -> glib::ExitCode {
     // Create a new application
     let app = Application::builder().application_id(APP_ID).build();
@@ -16,29 +17,30 @@ fn main() -> glib::ExitCode {
     app.run()
 }
 
-fn build_ui(app: &Application) {
-    // Create a button with label and margins
-    let button = Button::builder()
-        .label("Press me!")
+fn build_ui(application: &Application) {
+    // Create two buttons
+    let button_increase = Button::builder()
+        .label("Increase")
         .margin_top(12)
         .margin_bottom(12)
         .margin_start(12)
         .margin_end(12)
         .build();
 
-    // Connect to "clicked" signal of `button`
-    button.connect_clicked(|button| {
-        // Set the label to "Hello World!" after the button has been clicked on
-        button.set_label("Hello World!");
-    });
+    // A mutable integer
+    let mut number = 0;
+
+    // Connect callbacks
+    // When a button is clicked, `number` should be changed
+    button_increase.connect_clicked( move |_| number += 1);
 
     // Create a window
     let window = ApplicationWindow::builder()
-        .application(app)
+        .application(application)
         .title("My GTK App")
-        .child(&button)
+        .child(&button_increase)
         .build();
 
-    // Present window
+    // Present the window
     window.present();
 }
