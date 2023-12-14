@@ -28,11 +28,11 @@ fn build_ui(application: &Application) {
         .build();
 
     // A mutable integer
-    let mut number = 0;
+    let number = Cell::new(0);
 
     // Connect callbacks
     // When a button is clicked, `number` should be changed
-    button_increase.connect_clicked( move |_| number += 1);
+    button_increase.connect_clicked(move |_| number.set(number.get() + 1));
 
     // Create a window
     let window = ApplicationWindow::builder()
